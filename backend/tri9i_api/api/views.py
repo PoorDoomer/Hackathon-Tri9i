@@ -15,9 +15,9 @@ import requests
 from retinaface import RetinaFace
 def process_video_feed(video_url):
     # Load the DNN Face Detection model
-    model_file = "models/res10_300x300_ssd_iter_140000_fp16.caffemodel"
-    config_file = "models/deploy.prototxt"
-    net = cv2.dnn.readNetFromCaffe(config_file, model_file)
+    # model_file = "models/res10_300x300_ssd_iter_140000_fp16.caffemodel"
+    # config_file = "models/deploy.prototxt"
+    # net = cv2.dnn.readNetFromCaffe(config_file, model_file)
     # model = RetinaFaceModel(quality="normal")
     cap = cv2.VideoCapture(video_url, cv2.CAP_FFMPEG)
 
@@ -53,7 +53,7 @@ class VideoFeedView(APIView):
             num_faces, frame = process_video_feed(video_url)
 
             # Determine if the bus is empty or full
-            bus_status = "empty" if num_faces == 0 else "full"
+            bus_status = "empty" if num_faces <= 5 else "full"
 
             return Response({"num_faces": num_faces, "bus_status": bus_status}, status=status.HTTP_200_OK)
 
